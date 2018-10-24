@@ -9,10 +9,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *     "post",
+ *     "special"={
+ *         "method"="POST",
+ *         "path"="/utilisateurs/special.{_format}",
+ *          "requirements"={
+ *              "_format": "\s+"
+ *           },
+ *         "controller"=App\Controller\UtilisateurSpecial::class
+ *     }
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\UtilisateurRepository")
  * @UniqueEntity(fields="email", message="Cet email est déjà enregistré en base.")
  * @UniqueEntity(fields="username", message="Cet identifiant est déjà enregistré en base")
+ * 
  */
 class Utilisateur implements UserInterface, \Serializable
 {
@@ -31,7 +43,7 @@ class Utilisateur implements UserInterface, \Serializable
     private $username;
  
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string")
      */
     private $password;
  
