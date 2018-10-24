@@ -7,6 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
 
+// Set Environnement variable
+/*$_SERVER['APP_ENV']='prod';
+$_SERVER['DATABASE_URL']='DATABASE_URL=mysql://root:""@127.0.0.1:3306/semges_db';
+*/
 // The check is to ensure we don't use .env in production
 if (!isset($_SERVER['APP_ENV'])) {
     if (!class_exists(Dotenv::class)) {
@@ -31,6 +35,8 @@ if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
+
+
 
 $kernel = new Kernel($env, $debug);
 $request = Request::createFromGlobals();

@@ -1,14 +1,29 @@
 security:
-    encoders:
+    encoders:       
         App\Entity\Utilisateur:
             algorithm: bcrypt
   
     providers:
-        #in_memory: { memory: ~ }
+        #in_memory: 
+        #    memory:
+        #        users:
+        #            ak:
+        #                password: ak
+        #                roles: 'ROLE_USER'
+        #            bs:
+        #                password: bs
+        #                roles: 'ROLE_ADMIN'                
+                
         our_db_provider:
             entity:
                 class: App\Entity\Utilisateur
-                
+
+    role_hierarchy:
+        # un membre avec le ROLE_ADMIN aura également le ROLE_USER
+        ROLE_ADMIN: ROLE_USER
+        # Le ROLE_SUPER_ADMIN avec le ROLE_ALLOWED_TO_SWITCH qui permet de s'authentifier en se faisant passer pour n'importe quel membre. Particulièrement utile pour débugger son code.
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,7 +36,8 @@ security:
                 check_path:               /api/login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-                
+            provider: our_db_provider 
+
         api:
             pattern:   ^/api
             stateless: true
@@ -30,10 +46,14 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
                    
         main:
+            pattern:    ^/
+            user_checker: App\Security\UtilisateurChecker
             anonymous: true
             provider: our_db_provider
-            user_checker: App\Security\UtilisateurChecker
+            #switch_user: ~     
+
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
  
