@@ -2,6 +2,8 @@
 ###> symfony/framework-bundle ###
 /.env
 /public/bundles/
+/public/backup
+/deploy.php
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
