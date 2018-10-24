@@ -70,4 +70,17 @@ class UtilisateurRepository extends ServiceEntityRepository implements UserLoade
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Permet de sauvegarder un Utilisateur en Base de données
+     */
+    public function save(Utilisateur $utilisateur)
+    {
+         // Get entity manager
+         $entityManager =  $this->getEntityManager();
+         // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($utilisateur);
+          // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+    }
 }
