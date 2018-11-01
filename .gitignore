@@ -16,5 +16,6 @@
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
-#nous ne commitons pas le Composer
-/composer.phar
+/procfil.old
+/composer.old
+/HerokuDatabase.php
